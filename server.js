@@ -16,11 +16,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// home page route useful for initial server testing
+/** // home page route useful for initial server testing
 app.get("/", (req, res) => {
   res.send("Hello you have just hit the homepage");
-});
-
+});*/
 // since there is only one endpoint to be used
 //  routes definition in the index.js makes more sense
 app.get("/search", (req, res) => {

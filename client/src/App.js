@@ -11,12 +11,13 @@ function App() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
+      const response = await fetch(
         `http://localhost:5000/search?query=${query}`
       );
+      const responseData = await response.json();
       // Randoming the array just for change of response
       //Probably not the best way just something small
-      setData(response.data.sort(() => 0.5 - Math.random()));
+      setData(responseData.sort(() => 0.5 - Math.random()));
       setLoading(false);
     } catch (err) {
       console.log(err);

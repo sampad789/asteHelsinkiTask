@@ -54,13 +54,15 @@ app.get("/search", (req, res) => {
     });
 });
 
-// Serve static assests eg, deploying to heroku
-// Set static folder
-app.use(express.static(path.join(__dirname, "client/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
+//
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "client/build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
 // Define a port to run a server on or a deploy env port
 const PORT = process.env.PORT || 5000;
 

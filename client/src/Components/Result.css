@@ -39,6 +39,7 @@
 .subject {
   width: auto;
   padding: 16px;
+  margin: 8px;
   background-color: transparent;
 }
 .info {

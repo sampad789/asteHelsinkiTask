@@ -1,26 +1,32 @@
 import "./App.css";
-import axios from "axios";
 import { useState } from "react";
 import Result from "./Components/Result";
 import Loader from "./Components/Loader";
 function App() {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
+    setErrorMessage("");
     try {
       const response = await fetch(
         `http://localhost:5000/search?query=${query}`
       );
+
       const responseData = await response.json();
       // Randoming the array just for change of response
       //Probably not the best way just something small
+
       setData(responseData.sort(() => 0.5 - Math.random()));
       setLoading(false);
+      setErrorMessage("");
     } catch (err) {
-      console.log(err);
+      setErrorMessage("Data Not Found");
+      setData([]);
+      setLoading(false);
     }
   };
 
@@ -75,6 +81,7 @@ function App() {
             );
           })
         )}
+        {errorMessage && <h1 className="error"> {errorMessage} </h1>}
       </div>
     </div>
   );

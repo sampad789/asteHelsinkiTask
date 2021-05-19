@@ -25,32 +25,36 @@ app.get("/", (req, res) => {
 app.get("/search", (req, res) => {
   const extractQueryString = req.query.query;
 
-  // specifying the two urls used
+  if (typeof extractQueryString === "string") {
+    // specifying the two urls used
 
-  let firstURL = `http://api.hel.fi/linkedevents/v1/search/?format=json&q=${extractQueryString}`;
-  let secondURL = `https://api.finna.fi/api/v1/search?type=Title&field[]=title&field[]=images&field[]=urls&field[]=subjects&field[]=formats&lookfor=${extractQueryString}`;
+    let firstURL = `http://api.hel.fi/linkedevents/v1/search/?format=json&q=${extractQueryString}`;
+    let secondURL = `https://api.finna.fi/api/v1/search?type=Title&field[]=title&field[]=images&field[]=urls&field[]=subjects&field[]=formats&lookfor=${extractQueryString}`;
 
-  const requestForFirstURL = axios.get(firstURL);
-  const requestForSecondURL = axios.get(secondURL);
-  axios
-    .all([requestForFirstURL, requestForSecondURL])
-    .then((response) => axios.all(response.map((res) => res.data)))
-    .then((finalResponse) => {
-      let responseFromFirstURL = finalResponse[0].data;
+    const requestForFirstURL = axios.get(firstURL);
+    const requestForSecondURL = axios.get(secondURL);
+    axios
+      .all([requestForFirstURL, requestForSecondURL])
+      .then((response) => axios.all(response.map((res) => res.data)))
+      .then((finalResponse) => {
+        let responseFromFirstURL = finalResponse[0].data;
 
-      let responseFromSecondURL = finalResponse[1].records;
+        let responseFromSecondURL = finalResponse[1].records;
 
-      // using spread operator to combine the results of both url calls
-      const combinedFinalResponse = [
-        ...responseFromFirstURL,
-        ...responseFromSecondURL,
-      ];
+        // using spread operator to combine the results of both url calls
+        const combinedFinalResponse = [
+          ...responseFromFirstURL,
+          ...responseFromSecondURL,
+        ];
 
-      res.status(200).send(combinedFinalResponse);
-    })
-    .catch((err) => {
-      res.status(404).json({ Error: "DATA NOT Found " });
-    });
+        res.status(200).json(combinedFinalResponse);
+      })
+      .catch((err) => {
+        res.status(404).json({ Error: "Data Not Found" });
+      });
+  } else {
+    res.send("Error Not a String");
+  }
 });
 
 //

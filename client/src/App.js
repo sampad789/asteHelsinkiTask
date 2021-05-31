@@ -12,9 +12,7 @@ function App() {
     setLoading(true);
     setErrorMessage("");
     try {
-      const response = await fetch(
-        `http://localhost:5000/search?query=${query}`
-      );
+      const response = await fetch(`/search?query=${query}`);
 
       const responseData = await response.json();
       // Randoming the array just for change of response
